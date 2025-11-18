@@ -118,7 +118,46 @@ if (isset($_POST['simpan'])) {
                 Data Mahasiswa
             </div>
             <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">NIM</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Alamat</th>
+                            <th scope="col">Fakultas</th>
+                            <th scope="col">Aksi</th>
+                        </tr>
+                    <tbody>
+                        <?php
+                        $sql2 = "select * from mahasiswa order by id desc";
+                        $q2   = mysqli_query($koneksi, $sql2);
+                        $urut = 1;
+                        while ($r2 = mysqli_fetch_array($q2)) {
+                            $id = $r2['id'];
+                            $nim = $r2['nim'];
+                            $nama = $r2['nama'];
+                            $alamat = $r2['alamat'];
+                            $fakultas = $r2['fakultas'];
 
+                        ?>
+                            <tr>
+                                <th scope="row"><?php echo $urut++ ?></th>
+                                <td scope="row"><?php echo $nim ?></td>
+                                <td scope="row"><?php echo $nama ?></td>
+                                <td scope="row"><?php echo $alamat ?></td>
+                                <td scope="row"><?php echo $fakultas ?></td>
+                                <td scope="row">
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
