@@ -22,6 +22,17 @@ if(isset($_GET['op'])){
     $op = "";
 }
 
+if($op == 'delete'){
+    $id = $_GET['id'];
+    $sql1 = "delete from mahasiswa where id = '$id'";
+    $q1 = mysqli_query($koneksi, $sql1);
+    if($q1){
+        $sukses = "Berhasil hapus data";
+    } else {
+        $error = "Gagal melakukan hapus data";
+    }
+}
+
 if($op == 'edit'){
     $id = $_GET['id'];
     $sql1 = "select * from mahasiswa where id = '$id'";
@@ -101,6 +112,7 @@ if (isset($_POST['simpan'])) {
                         <?php echo $error ?>
                     </div>
                 <?php
+                    header("refresh:5;url=index.php");
                 }
                 ?>
                 <?php
@@ -110,6 +122,7 @@ if (isset($_POST['simpan'])) {
                         <?php echo $sukses ?>
                     </div>
                 <?php
+                header("refresh:5;url=index.php");
                 }
                 ?>
                 <form action="" method="POST">
@@ -181,8 +194,7 @@ if (isset($_POST['simpan'])) {
                                 <td scope="row"><?php echo $fakultas ?></td>
                                 <td scope="row">
                                     <a href="index.php?op=edit&id=<?php echo $id ?>"><button type="button" class="btn btn-warning">Edit</button></a>
-                                    
-                                    <button type="button" class="btn btn-danger">Delete</button>
+                                    <a href="index.php?op=delete&id=<?php echo $id ?>" onclick="return confirm('Apakah anda yakin ingin menghapus?')"><button type="button" class="btn btn-danger">Delete</button></a>
                                 </td>
                             </tr>
                         <?php
