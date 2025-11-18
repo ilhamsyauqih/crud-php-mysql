@@ -16,6 +16,28 @@ $fakultas   = "";
 $sukses     = "";
 $error      = "";
 
+if(isset($_GET['op'])){
+    $op = $_GET['op'];
+} else {
+    $op = "";
+}
+
+if($op == 'edit'){
+    $id = $_GET['id'];
+    $sql1 = "select * from mahasiswa where id = '$id'";
+    $q1 = mysqli_query($koneksi, $sql1);
+    $r1 = mysqli_fetch_array($q1);
+    $nim = $r1['nim'];
+    $nama = $r1['nama'];
+    $alamat = $r1['alamat'];
+    $fakultas = $r1['fakultas'];
+
+    if($nim == ''){
+        $error = "Data tidak ditemukan";
+    }
+}
+
+//PROSES CREATE DATA
 if (isset($_POST['simpan'])) {
     $nim = $_POST['nim'];
     $nama = $_POST['nama'];
@@ -23,12 +45,22 @@ if (isset($_POST['simpan'])) {
     $fakultas = $_POST['fakultas'];
 
     if ($nim && $nama && $alamat && $fakultas) {
-        $sql1 = "insert into mahasiswa(nim, nama, alamat, fakultas) values ('$nim', '$nama', '$alamat', '$fakultas')";
-        $q1  = mysqli_query($koneksi, $sql1);
-        if ($q1) {
-            $sukses = "Berhasil memasukkan data baru";
-        } else {
-            $error = "Gagal memasukkan data";
+        if($op == 'edit'){ //Untuk Update Data
+            $sql1 = "update mahasiswa set nim = '$nim', nama = '$nama', alamat = '$alamat', fakultas = '$fakultas' where id = '$id'";
+            $q1   = mysqli_query($koneksi,$sql1);
+            if($q1){
+                $sukses = "Data berhasil diupdate";
+            } else {
+                $error = "Data gagal diupdate";
+            }
+        } else { //Untuk Insert Data
+            $sql1 = "insert into mahasiswa(nim, nama, alamat, fakultas) values ('$nim', '$nama', '$alamat', '$fakultas')";
+            $q1  = mysqli_query($koneksi, $sql1);
+            if ($q1) {
+                $sukses = "Berhasil memasukkan data baru";
+            } else {
+                $error = "Gagal memasukkan data";
+            }
         }
     } else {
         $error = "Silahkan masukkan data!";
@@ -148,7 +180,8 @@ if (isset($_POST['simpan'])) {
                                 <td scope="row"><?php echo $alamat ?></td>
                                 <td scope="row"><?php echo $fakultas ?></td>
                                 <td scope="row">
-                                    <button type="button" class="btn btn-warning">Edit</button>
+                                    <a href="index.php?op=edit&id=<?php echo $id ?>"><button type="button" class="btn btn-warning">Edit</button></a>
+                                    
                                     <button type="button" class="btn btn-danger">Delete</button>
                                 </td>
                             </tr>
